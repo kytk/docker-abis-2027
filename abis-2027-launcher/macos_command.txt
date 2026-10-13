@@ -1,0 +1,22 @@
+ls ~/Library/Group\ Containers/group.com.docker/
+grep -oE '"(MemoryMiB|memoryMiB|Cpus|cpus|DiskSizeMiB|diskSizeMiB|SwapMiB|swapMiB|UseVirtualizationFrameworkRosetta|useVirtualizationFrameworkRosetta)"[^,]*' ~/Library/Group\ Containers/group.com.docker/settings-store.json
+
+analyticsmonitor.dat           marlin.dat
+cni                            npsId
+dhcp.json                      settings-store.json
+DockerAppStderr.txt            settings.json
+features-overrides.json        unleash-v2-docker-desktop.json
+forwards.json                  userId
+Library                        wc.dat
+"Cpus": 4
+"DiskSizeMiB": 122880
+"MemoryMiB": 8192
+"SwapMiB": 1024
+"UseVirtualizationFrameworkRosetta": true
+
+
+osascript -l JavaScript ~/abis-2027-launcher-macos/lib/docker_settings.js get ~/Library/Group\ Containers/group.com.docker/settings-store.json MemoryMiB SwapMiB UseVirtualizationFrameworkRosetta
+
+MemoryMiB=8192
+SwapMiB=1024
+UseVirtualizationFrameworkRosetta=true

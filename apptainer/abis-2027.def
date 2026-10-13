@@ -1,0 +1,70 @@
+Bootstrap: docker-daemon
+From: kytk/abis-2027:latest
+
+%help
+    ABiS 2027 - Lin4Neuro neuroimaging analysis environment (Apptainer)
+
+    GUI モード（noVNC）:
+        apptainer run --writable-tmpfs --no-home --contain abis-2027.sif
+
+    共有フォルダ付き:
+        apptainer run --writable-tmpfs --no-home --contain \
+          --bind /path/to/share:/home/brain/share \
+          abis-2027.sif
+
+    シェルモード:
+        apptainer shell --writable-tmpfs --no-home --contain abis-2027.sif
+
+    接続:
+        ブラウザで http://localhost:6080/vnc.html
+        パスワード: lin4neuro
+
+%files
+    start-novnc.sh /usr/local/bin/start-novnc.sh
+
+%environment
+    export TZ=Asia/Tokyo
+    export DISPLAY=:99
+    export USER=brain
+    export HOME=/home/brain
+
+    # XDG: 書き込み先を /tmp 配下にする（読み取り専用 .sif 対策）
+    export XDG_CONFIG_HOME=/tmp/.config
+    export XDG_CACHE_HOME=/tmp/.cache
+    export XDG_DATA_HOME=/tmp/.local/share
+    export XDG_RUNTIME_DIR=/tmp/runtime-brain
+
+    # Neuroimaging software paths
+    export ANTSPATH=/usr/local/ANTs/bin
+    export FREESURFER_HOME=/usr/local/freesurfer/8.1.0
+    export FSLDIR=/usr/local/fsl
+    export PATH=/usr/local/Mango:/usr/local/MRIcroGL:/usr/local/MRIcroGL/Resources:/usr/local/dcm2niix:/usr/local/mrtrix3/bin:${ANTSPATH}:${FSLDIR}/share/fsl/bin:/home/brain/git/fs-scripts:/home/brain/git/kn-scripts:$PATH
+
+%post
+    chmod 755 /usr/local/bin/start-novnc.sh
+
+    # .bash_aliases の xset をガード（DISPLAY 未設定時のエラー抑制）
+    sed -i 's/^xset s off$/[ -n "$DISPLAY" ] \&\& xset s off/' /home/brain/.bash_aliases
+
+%runscript
+    exec /usr/local/bin/start-novnc.sh
+
+%startscript
+    exec /usr/local/bin/start-novnc.sh
+
+%test
+    /bin/bash -c "
+        echo 'Testing essential commands...'
+        export FREESURFER_HOME=/usr/local/freesurfer/8.1.0
+        export FSLDIR=/usr/local/fsl
+        source \${FREESURFER_HOME}/SetUpFreeSurfer.sh > /dev/null 2>&1
+        . \${FSLDIR}/etc/fslconf/fsl.sh > /dev/null 2>&1
+        command -v fsl
+        command -v freeview
+        command -v dcm2niix
+        command -v mrview
+        command -v ANTS
+        test -x /usr/local/spm25_standalone/run_spm25.sh
+        test -x /usr/local/conn22v2407_standalone/run_conn.sh
+        echo 'Test finished.'
+    "

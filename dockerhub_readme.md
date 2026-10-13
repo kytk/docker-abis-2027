@@ -1,4 +1,4 @@
-# kytk/abis-2026 - Neuroimaging Analysis Integrated Environment for ABiS tutorial
+# kytk/abis-2027 - Neuroimaging Analysis Integrated Environment for ABiS tutorial
 
 [English](#english) | [日本語](#japanese)
 
@@ -7,7 +7,7 @@
 ## English
 
 ### Overview
-`kytk/abis-2026` is a comprehensive Docker container for neuroimaging analysis, providing a complete desktop environment with pre-installed neuroimaging software packages. The container runs an XFCE4 desktop accessible via web browser through noVNC.
+`kytk/abis-2027` is a comprehensive Docker container for neuroimaging analysis, providing a complete desktop environment with pre-installed neuroimaging software packages. The container runs an XFCE4 desktop accessible via web browser through noVNC.
 
 ### Features
 - **Complete Desktop Environment**: XFCE4 desktop with web browser access
@@ -16,7 +16,7 @@
   - FSL 6.0.7.18
   - ANTs (Advanced Normalization Tools)
   - SPM25 Standalone
-  - CONN v22v2407 Standalone
+  - CONN 22v2407 Standalone
   - MRtrix3
   - dcm2niix
   - MRIcroGL
@@ -37,8 +37,8 @@
 docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 #### Interactive Shell Mode
@@ -46,8 +46,8 @@ docker run -d \
 docker run -it \
   -v .:/home/brain/share \
   -e MODE=bash \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 #### Access the Desktop
@@ -103,14 +103,14 @@ docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
   -v /path/to/neuroimaging/data:/home/brain/data \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 
 # Interactive session
 docker run -it \
   -v .:/home/brain/share \
   -e MODE=bash \
-  kytk/abis-2026 \
+  kytk/abis-2027 \
   /bin/bash
 
 # With memory limit
@@ -118,21 +118,21 @@ docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
   -m 8g \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 ### Troubleshooting
 - If GUI doesn't load, wait 30 seconds for all services to start
-- Check container logs: `docker logs abis-2026`
-- Restart container: `docker restart abis-2026`
+- Check container logs: `docker logs abis-2027`
+- Restart container: `docker restart abis-2027`
 
 ---
 
 ## Japanese
 
 ### 概要
-`kytk/abis-2026` は、神経画像解析のための統合Dockerコンテナです。事前にインストールされた神経画像解析ソフトウェアパッケージを含む完全なデスクトップ環境を提供し、noVNCを通じてWebブラウザからXFCE4デスクトップにアクセスできます。
+`kytk/abis-2027` は、神経画像解析のための統合Dockerコンテナです。事前にインストールされた神経画像解析ソフトウェアパッケージを含む完全なデスクトップ環境を提供し、noVNCを通じてWebブラウザからXFCE4デスクトップにアクセスできます。
 
 ### 特徴
 - **完全なデスクトップ環境**: WebブラウザアクセスでXFCE4デスクトップ
@@ -141,7 +141,7 @@ docker run -d \
   - FSL 6.0.7.18
   - ANTs (Advanced Normalization Tools)
   - SPM25 スタンドアロン版
-  - CONN v22v2407 スタンドアロン版
+  - CONN 22v2407 スタンドアロン版
   - MRtrix3
   - dcm2niix
   - MRIcroGL
@@ -162,8 +162,8 @@ docker run -d \
 docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 #### 対話型シェルモード
@@ -171,8 +171,8 @@ docker run -d \
 docker run -it \
   -v .:/home/brain/share \
   -e MODE=bash \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 #### デスクトップへのアクセス
@@ -228,14 +228,14 @@ docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
   -v /path/to/neuroimaging/data:/home/brain/data \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 
 # 対話セッション
 docker run -it \
   -v .:/home/brain/share \
   -e MODE=bash \
-  kytk/abis-2026 \
+  kytk/abis-2027 \
   /bin/bash
 
 # メモリ制限あり
@@ -243,14 +243,14 @@ docker run -d \
   -p 6080:6080 \
   -v .:/home/brain/share \
   -m 8g \
-  --name abis-2026 \
-  kytk/abis-2026
+  --name abis-2027 \
+  kytk/abis-2027
 ```
 
 ### トラブルシューティング
 - GUIが読み込まれない場合は、すべてのサービスが開始されるまで30秒お待ちください
-- コンテナログを確認: `docker logs abis-2026`
-- コンテナを再起動: `docker restart abis-2026`
+- コンテナログを確認: `docker logs abis-2027`
+- コンテナを再起動: `docker restart abis-2027`
 
 ---
 
@@ -259,7 +259,7 @@ docker run -d \
 ### System Requirements
 - RAM: 4GB minimum, 8GB+ recommended
 - Disk space: ~15GB for container image
-- Supported platforms: Linux (x86_64)
+- Supported platforms: Linux (x86_64), macOS (via Rosetta 2 on Apple Silicon)
 
 ### Container Details
 - Base image: Ubuntu 22.04 LTS
@@ -277,4 +277,4 @@ This container includes various neuroimaging software packages, each with their 
 - Container-specific issues: Contact the maintainer
 
 ### Version History
-- abis-2026: Latest integrated neuroimaging analysis environment with multi-stage build optimization
+- abis-2027: Latest integrated neuroimaging analysis environment with multi-stage build optimization

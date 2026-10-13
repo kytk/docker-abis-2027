@@ -1,2 +1,18 @@
-packages/*
+# Build inputs that are too large for git (tarballs, installers, .deb)
+build/packages/*
+
+# Build artefacts
+build.log
+*.sif
+abis-2027-wsl2.tar.gz
+
+# Launcher archives: built by make_release.sh, distributed as release assets
+# of kytk/abis-web-2027 (each carries a generated VERSION.txt)
+abis-2027-launcher/abis-2027-launcher-macos.tar.gz
+abis-2027-launcher/abis-2027-launcher-windows.zip
+abis-2027-launcher/abis-2027-launcher-macos.zip
+
+CLAUDE.md
+LOG.md
+
 

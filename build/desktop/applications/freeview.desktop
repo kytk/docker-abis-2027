@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Freeview
+GenericName=FreeSurfer Viewer
+Exec=/usr/local/freesurfer/8.2.0/bin/freeview %F
+TryExec=/usr/local/freesurfer/8.2.0/bin/freeview
+Icon=fscortex.png
+Type=Application
+Terminal=false
+Categories=Neuroimaging;
+NoDisplay=false

@@ -1,0 +1,94 @@
+# syntax=docker/dockerfile:1
+
+# Dockerfile.wsl2 - Windows WSL2 distribution with xrdp
+# Author: K. Nemoto
+# Date: 14 Feb 2026
+#
+# Build and export:
+#   docker build --platform linux/amd64 -t abis-2027-wsl2:latest -f Dockerfile.wsl2 .
+#   docker create --name tmp-wsl2 abis-2027-wsl2:latest
+#   docker export tmp-wsl2 | gzip > abis-2027-wsl2.tar.gz
+#   docker rm tmp-wsl2
+#
+# Import into WSL2:
+#   wsl --import Lin4Neuro <install-path> abis-2027-wsl2.tar.gz
+
+FROM kytk/abis-2027:latest
+
+# ============================================================
+# ロケールと xrdp のインストールと設定
+# ============================================================
+RUN apt-get update && apt-get install -y \
+    locales \
+    xrdp \
+    xorgxrdp \
+    fcitx \
+    fcitx-mozc \
+    && locale-gen ja_JP.UTF-8 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=ja_JP.UTF-8
+ENV LANGUAGE=ja_JP:ja
+
+# xrdp のポートを 3390 に変更（Windows の RDP 3389 と衝突を避ける）
+# key.pem のパーミッションを修正（Permission denied エラー対策）
+RUN sed -i 's/port=3389/port=3390/' /etc/xrdp/xrdp.ini && \
+    chmod 640 /etc/xrdp/key.pem && \
+    chown root:xrdp /etc/xrdp/key.pem
+
+# startwm.sh を書き換え: XFCE コンポーネントを個別に起動する
+# - xfce4-session は WSL2 + xorgxrdp 環境で SIGSEGV を起こすため不使用
+# - dbus-run-session も同様に SIGSEGV のため dbus-launch を使用
+# - GDK_BACKEND=x11: WSLg の Wayland が干渉するのを防ぐ
+# - xfwm4 --compositor=off: コンポジターは xorgxrdp 非対応
+COPY wsl2/startwm.sh /etc/xrdp/startwm.sh
+RUN chmod +x /etc/xrdp/startwm.sh
+
+# ============================================================
+# ユーザー設定
+# ============================================================
+# xrdp ログイン用パスワードを設定
+RUN echo "brain:lin4neuro" | chpasswd
+
+# brain ユーザーが xrdp の起動/停止をパスワードなしで実行できるようにする
+RUN echo "brain ALL=(ALL) NOPASSWD: /usr/bin/systemctl start xrdp, /usr/bin/systemctl stop xrdp, /usr/bin/systemctl restart xrdp, /etc/init.d/xrdp start, /etc/init.d/xrdp stop, /etc/init.d/xrdp restart" > /etc/sudoers.d/xrdp && \
+    chmod 440 /etc/sudoers.d/xrdp
+
+# WSL2 ターミナルで DISPLAY 未設定時の xset エラーを抑制
+RUN sed -i 's/^xset s off$/[ -n "$DISPLAY" ] \&\& xset s off/' /home/brain/.bash_aliases
+
+# fcitx (日本語入力) の環境変数を .bash_aliases に追加
+RUN printf '\n# fcitx (Japanese input method)\nexport GTK_IM_MODULE=fcitx\nexport QT_IM_MODULE=fcitx\nexport XMODIFIERS=@im=fcitx\n' >> /home/brain/.bash_aliases
+
+# fcitx プロファイル: English (US) + Mozc を設定
+RUN mkdir -p /home/brain/.config/fcitx && \
+    chown -R brain:brain /home/brain/.config/fcitx
+COPY --chown=brain:brain wsl2/fcitx-profile /home/brain/.config/fcitx/profile
+
+# ============================================================
+# デスクトップメニュー・アイコン・アプリケーション
+# ============================================================
+# ~/.local/share (icons, applications, desktop-directories) を展開
+COPY --chown=brain:brain build/desktop/icons/ /home/brain/.local/share/icons/
+COPY --chown=brain:brain build/desktop/applications/ /home/brain/.local/share/applications/
+COPY --chown=brain:brain build/desktop/desktop-directories/ /home/brain/.local/share/desktop-directories/
+
+# Neuroimaging カテゴリを含むカスタムメニュー定義
+COPY --chown=brain:brain build/desktop/menus/xfce-applications.menu /home/brain/.config/menus/xfce-applications.menu
+
+# ============================================================
+# WSL2 用設定ファイル
+# ============================================================
+COPY wsl2/wsl.conf /etc/wsl.conf
+
+# WSL2 固有の bashrc 追加設定
+COPY wsl2/bashrc_additions /tmp/bashrc_additions
+RUN cat /tmp/bashrc_additions >> /home/brain/.bashrc && \
+    chown brain:brain /home/brain/.bashrc && \
+    rm /tmp/bashrc_additions
+
+# ============================================================
+# xrdp 起動スクリプト
+# ============================================================
+COPY wsl2/start-xrdp.sh /usr/local/bin/start-xrdp.sh
+RUN chmod +x /usr/local/bin/start-xrdp.sh

@@ -1,0 +1,4 @@
+
+# WSL2-specific settings
+# FreeSurfer license: WSL2 ではホームディレクトリに配置可能
+# cp /mnt/c/Users/<username>/license.txt ~/share/license.txt

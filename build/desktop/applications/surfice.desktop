@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=surf-ice
+Exec=/usr/local/Surf_Ice/surfice
+Icon=surfice.png
+Terminal=false
+Categories=Neuroimaging;
+StartupNotify=true
+NoDisplay=true
+
+

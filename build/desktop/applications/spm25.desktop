@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SPM25
+GenericName=Statistical Parametric Mapping
+Exec=bash -c '/usr/local/spm25_standalone/run_spm25.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
+TryExec=/usr/local/spm25_standalone/run_spm25.sh
+Icon=spm25.png
+Type=Application
+Terminal=true
+Categories=Neuroimaging;
+NoDisplay=false

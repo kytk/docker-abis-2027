@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FSLeyes
+GenericName=FSL Image Viewer
+Exec=/usr/local/fsl/share/fsl/bin/fsleyes %F
+TryExec=/usr/local/fsl/share/fsl/bin/fsleyes
+Icon=fsleyes.png
+Type=Application
+Terminal=false
+Categories=Neuroimaging;
+NoDisplay=false

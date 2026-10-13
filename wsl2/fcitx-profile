@@ -1,0 +1,3 @@
+[Profile]
+IMName=mozc
+EnabledIMList=fcitx-keyboard-us:True,mozc:True

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FSL
+GenericName=Software Collection for (f)MRI Data Analysis
+GenericName[de]=Software-Kollektion zur (f)MRT-Daten Analyse
+Exec=bash -c 'export FSLDIR=/usr/local/fsl; . $FSLDIR/etc/fslconf/fsl.sh; exec $FSLDIR/share/fsl/bin/fsl'
+TryExec=/usr/local/fsl/share/fsl/bin/fsl
+Icon=fsl.png
+Type=Application
+Terminal=false
+Categories=Neuroimaging;
+NoDisplay=false

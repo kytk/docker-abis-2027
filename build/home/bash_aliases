@@ -36,15 +36,15 @@ export PATH=$PATH:/usr/local/mrtrix3/bin
 # dcm2niix
 export PATH=/usr/local/dcm2niix:$PATH
 
-#SPM12 standalone
+#SPM25 standalone
 alias spm25='/usr/local/spm25_standalone/run_spm25.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
 
-#conn22v2407 standalone
-alias conn='/usr/local/conn22v2407_standalone/run_conn.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
+#conn25b standalone
+alias conn='/usr/local/conn25b_standalone/run_conn.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
 
-#FreeSurfer 8.1.0
-export SUBJECTS_DIR=~/freesurfer/8.1.0/subjects
-export FREESURFER_HOME=/usr/local/freesurfer/8.1.0
+#FreeSurfer 8.2.0
+export SUBJECTS_DIR=~/freesurfer/8.2.0/subjects
+export FREESURFER_HOME=/usr/local/freesurfer/8.2.0
 export FS_LICENSE=~/share/license.txt
 source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
@@ -59,4 +59,10 @@ PATH=$PATH:/home/brain/git/fs-scripts
 
 # kn-scripts 
 PATH=$PATH:/home/brain/git/kn-scripts
+
+# Python venv
+# Ubuntu 24.04 enforces PEP 668, so pip packages are installed into this venv
+# at image build time. Prepending its bin directory makes python3, pip and
+# jupyter resolve to the venv without an explicit "source .venv/bin/activate".
+export PATH=/home/brain/.venv/bin:$PATH
 

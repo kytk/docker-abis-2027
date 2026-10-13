@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MRIcroGL
+GenericName=NIfTI Viewer
+Comment=Medical Imaging
+Exec=/usr/local/MRIcroGL/MRIcroGL %F
+TryExec=/usr/local/MRIcroGL/MRIcroGL
+Icon=mricrogl.svg
+Type=Application
+Terminal=false
+Categories=Graphics;Neuroimaging;
+NoDisplay=false

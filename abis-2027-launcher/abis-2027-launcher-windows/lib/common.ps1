@@ -48,8 +48,10 @@ $Script:VncPassword = 'lin4neuro'
 $Script:VncUrl      = 'http://127.0.0.1:{0}/vnc.html?resize=scale&autoconnect=1&password={1}' -f $Script:HostPort, $Script:VncPassword
 
 # Minimum requirements checked by 0_Check_Environment. The memory assigned to
-# the Docker VM is checked against Get-WslMemoryTargetGB below.
+# the Docker VM is checked against MinDockerMemoryGB, or against
+# Get-WslMemoryTargetGB below where that is lower (RAM under 16 GB).
 $Script:MinFreeDiskGB     = 100   # free space on the system drive
+$Script:MinDockerMemoryGB = 8     # enough for the tutorial; more is not needed
 $Script:MinDockerDiskGB   = 60    # space available inside the Docker VM
 
 # Timeouts (seconds)

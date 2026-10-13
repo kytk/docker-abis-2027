@@ -226,11 +226,14 @@ Docker が起動していません。
             Add-Line ("  仮想マシンの CPU    : {0}" -f $parts[1])
             Add-Line ("  仮想マシンのメモリ  : {0} GB" -f $memText)
             Add-Line ("  データ保存先 : {0}" -f $parts[4])
-            # Compared with what 4_Configure_WSL would set on this PC, so that a
-            # PC under 16 GB, already warned about above, is not sent to a
-            # script that has nothing to raise.
+            # 8 GB is enough for the tutorial, so a large PC is not told to
+            # raise memory towards what 4_Configure_WSL would set (with 64 GB
+            # RAM the WSL default of half the RAM, 31.3 GB, used to be warned
+            # about). Below 16 GB RAM the target is lower than 8 GB; using it
+            # keeps such a PC, already warned about above, from being sent to
+            # a script that has nothing to raise.
             $ramGB     = Get-InstalledRamGB
-            $memTarget = if ($ramGB) { Get-WslMemoryTargetGB -RamGB $ramGB } else { 0 }
+            $memTarget = if ($ramGB) { [math]::Min($Script:MinDockerMemoryGB, (Get-WslMemoryTargetGB -RamGB $ramGB)) } else { 0 }
             if ((ConvertTo-RoundedGB $parts[2]) -lt $memTarget) {
                 # With the WSL 2 backend Docker Desktop's Settings -> Resources
                 # has no memory slider; the VM is sized by .wslconfig instead.

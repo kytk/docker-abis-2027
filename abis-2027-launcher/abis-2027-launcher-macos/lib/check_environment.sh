@@ -153,10 +153,14 @@ else
       add_line "  仮想マシンの CPU   : ${NCPU}"
       add_line "  仮想マシンのメモリ : ${MEM_TEXT} GB"
       add_line "  データ保存先 : ${ROOT}"
-      # Compared with what 4_Configure_Docker would set on this Mac, so that a
-      # Mac under 16 GB, already warned about above, is not sent to a script
-      # that has nothing to raise. 0 (RAM unknown) never warns.
-      if [ "$(bytes_to_gb_round "$MEMB")" -lt "$(docker_memory_target_gb "$(installed_ram_gb)")" ]; then
+      # 8 GB is enough for the tutorial, so a large Mac is not told to raise
+      # memory towards what 4_Configure_Docker would set. Below 16 GB RAM the
+      # target is lower than 8 GB; using it keeps such a Mac, already warned
+      # about above, from being sent to a script that has nothing to raise.
+      # 0 (RAM unknown) never warns.
+      MEM_MIN_GB="$(docker_memory_target_gb "$(installed_ram_gb)")"
+      [ "$MEM_MIN_GB" -gt "$MIN_DOCKER_MEMORY_GB" ] && MEM_MIN_GB="$MIN_DOCKER_MEMORY_GB"
+      if [ "$(bytes_to_gb_round "$MEMB")" -lt "$MEM_MIN_GB" ]; then
         add_warning "Docker に割り当てられたメモリが ${MEM_TEXT} GB しかありません。「4_Configure_Docker」を実行すると増やせます。"
       fi
       if [ "$NCPU" -lt 4 ]; then

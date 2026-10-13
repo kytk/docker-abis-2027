@@ -156,6 +156,12 @@
 - [ ] `SwapMiB=4096` が受け付けられる（スライダーの最大値と想定）。8 GB の Mac で
       `MemoryMiB=8192` が受け付けられる。
 - [ ] Intel Mac: Rosetta の行は出ず、memory / swap のみ。
+- [ ] Docker Desktop を新規インストールした Mac で、仮想ディスク上限の既定値
+      （`settings-store.json` の `DiskSizeMiB` と GUI の表示）を記録する。wiki
+      （02_2_macOS_Docker.md「Docker Desktop の設定」）に書いた
+      Settings -> Resources -> Advanced -> Virtual disk limit の場所と表記が
+      実際の画面と一致すること、100 GB に増やした後 `0_Check_Environment` の
+      「Docker が使えるディスク容量」が増えていることを確認する。
 - [ ] Lin4Neuro 起動中は `4_Configure_Docker` が拒否する。
 - [ ] 変更後に起動した Docker Desktop が編集したキーをリセットしない
       （つまり、起動時に本当に `settings-store.json` を読んでいる）。
@@ -190,3 +196,15 @@
 - [ ] Docker Desktop をちょうど 8 GB に設定する: `0_Check_Environment` は
       「7.9 GB」（または VM が報告する値）と表示し、メモリについて警告**しない**。
       7 GB ではまだ警告する。
+- [ ] ディスク使用量の実測（Windows と Mac のそれぞれ）: イメージがない状態から
+      `1_Download_Image` を実行し、実行前・ダウンロード中（最大時）・完了後の
+      本体ディスクの空きと `docker system df` を記録する。wiki の見積もり
+      （展開後約 38 GB + ダウンロード中の一時領域約 20 GB + Docker Desktop 約 3 GB）
+      と比べ、最大時でも `MinFreeDiskGB` / `MIN_FREE_DISK_GB`（100 GB）の範囲に
+      収まることを確認する。containerd image store（Docker Desktop 4.34 以降の
+      新規インストールの既定）を使っているかどうかもあわせて記録する
+      （`docker info` の Storage Driver / driver-type）。
+- [ ] RAM 64 GB の PC で `.wslconfig` なし（WSL の既定で約 31.3 GB）:
+      `0_Check_Environment` がメモリについて警告**しない**（以前は
+      「31.3 GB しかありません」と出ていた。判定は 8 GB 以上で OK、RAM 16 GB
+      未満の PC では `4_Configure_WSL` / `4_Configure_Docker` の目標値以上で OK）。

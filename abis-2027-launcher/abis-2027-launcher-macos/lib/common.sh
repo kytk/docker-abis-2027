@@ -49,8 +49,10 @@ VNC_PASSWORD="lin4neuro"
 VNC_URL="http://127.0.0.1:${HOST_PORT}/vnc.html?resize=scale&autoconnect=1&password=${VNC_PASSWORD}"
 
 # Minimum requirements checked by 0_Check_Environment. The memory assigned to
-# the Docker VM is checked against docker_memory_target_gb below.
+# the Docker VM is checked against MIN_DOCKER_MEMORY_GB, or against
+# docker_memory_target_gb below where that is lower (RAM under 16 GB).
 MIN_FREE_DISK_GB=100     # free space on the startup disk
+MIN_DOCKER_MEMORY_GB=8   # enough for the tutorial; more is not needed
 MIN_DOCKER_DISK_GB=60    # space available inside the Docker VM
 
 # Timeouts (seconds)

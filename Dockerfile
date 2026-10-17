@@ -464,11 +464,11 @@ COPY --chown=brain:brain build/desktop/xfce4-desktop.xml /home/brain/.config/xfc
 COPY --chown=brain:brain build/desktop/xfce4-panel.xml /home/brain/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 COPY --chown=brain:brain build/desktop/terminalrc /home/brain/.config/xfce4/terminal/terminalrc
 COPY build/init/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-# macOS の共有フォルダで生成される ._* / .DS_Store を定期的に消す常駐スクリプト。
+# macOS の共有フォルダで生成される ._* / .DS_Store を消すスクリプト。
 # これらがあるとコンテナの GUI でファイルマネージャが開けなくなる。自動起動は
-# せず、困った受講者が端末から auto_clean_metadata.sh と打って使う（PATH が
-# 通っているので引数もパスも要らない）。Windows/Linux では消すものがないので、
-# 全環境に入れておいて害はない。
+# せず、困った受講者が端末から auto_clean_metadata.sh と打って 1 回掃除する
+# （PATH が通っているのでパスは要らない）。--watch で 10 秒ごとに常駐する。
+# Windows/Linux では消すものがないので、全環境に入れておいて害はない。
 COPY --chmod=755 build/bin/auto_clean_metadata.sh /usr/local/bin/auto_clean_metadata.sh
 COPY build/init/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY build/init/startup.sh /usr/local/bin/startup.sh

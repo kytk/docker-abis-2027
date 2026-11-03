@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SPM26
+GenericName=Statistical Parametric Mapping
+Exec=bash -c '/usr/local/spm26_standalone/run_spm26.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
+TryExec=/usr/local/spm26_standalone/run_spm26.sh
+Icon=spm26.png
+Type=Application
+Terminal=true
+Categories=Neuroimaging;
+NoDisplay=false

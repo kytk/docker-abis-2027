@@ -2,10 +2,11 @@
 
 # Dockerfile for kytk/abis-2027 with Multi-Stage Build
 # Author: K. Nemoto
-# Date: 22 Sep 2026
+# Date: 03 Nov 2026
 # Description: This Dockerfile uses a multi-stage build to create a smaller,
 #              optimized container image for neuroimaging analysis.
 
+# 1.0.21: employ SPM26
 # 1.0.20: change the base from 22.04 to 24.04
 #         - AlizaMS: switch from the OBS .deb (22.04 only) to the upstream
 #           "binary only" tarball + Qt5 libraries from apt (no Flatpak needed)
@@ -148,12 +149,12 @@ RUN --mount=type=bind,source=build/packages/freesurfer_ubuntu24-8.2.0_amd64.deb,
     chown -R 1000:1000 /usr/local/freesurfer/8.2.0/subjects /home/brain
 
 #------------------------------------------------------------------------------
-# mcr-builder: MATLAB Runtime R2024b (custom), SPM25, CONN
+# mcr-builder: MATLAB Runtime R2024b (custom), SPM26, CONN
 #------------------------------------------------------------------------------
 FROM base-builder AS mcr-builder
 
 RUN --mount=type=bind,source=build/packages/abis_mcr_r2024b/abis_mcr_r2024b.install,target=/tmp/packages/abis_mcr_r2024b/abis_mcr_r2024b.install \
-    --mount=type=bind,source=build/packages/spm25_standalone_noble_R2024b.zip,target=/tmp/packages/spm25_standalone_noble_R2024b.zip \
+    --mount=type=bind,source=build/packages/spm26_standalone_noble_R2024b.zip,target=/tmp/packages/spm26_standalone_noble_R2024b.zip \
     --mount=type=bind,source=build/packages/conn25b_glnxa64.zip,target=/tmp/packages/conn25b_glnxa64.zip \
     set -ex && \
     # MATLAB Runtime R2024b (custom minimal build)
@@ -193,9 +194,9 @@ RUN --mount=type=bind,source=build/packages/abis_mcr_r2024b/abis_mcr_r2024b.inst
       ! -name 'libcurl*' -delete && \
     rm -rf sys/cuda && \
     echo "MATLAB Runtime after cleanup: $(du -sh /usr/local/MATLAB/MCR/R2024b | cut -f1)" && \
-    # SPM25
-    unzip /tmp/packages/spm25_standalone_noble_R2024b.zip -d /tmp/ && \
-    mv /tmp/spm25_standalone /usr/local && \
+    # SPM26
+    unzip /tmp/packages/spm26_standalone_noble_R2024b.zip -d /tmp/ && \
+    mv /tmp/spm26_standalone /usr/local && \
     # CONNv25b
     # conn25b_glnxa64.zip has no top-level directory (conn, run_conn.sh, ... sit
     # at the archive root), so extract into an explicit target directory.
@@ -384,8 +385,8 @@ COPY --from=fs-builder --chown=brain:brain /home/brain/freesurfer/ /home/brain/f
 # Part 2c: Copy MATLAB MCR R2024b (~3.5GB: custom runtime minus NVIDIA libraries)
 COPY --from=mcr-builder /usr/local/MATLAB/ /usr/local/MATLAB/
 
-# Part 2d: Copy SPM25 and CONN (~0.5GB)
-COPY --from=mcr-builder --chown=brain:brain /usr/local/spm25_standalone/ /usr/local/spm25_standalone/
+# Part 2d: Copy SPM26 and CONN (~0.5GB)
+COPY --from=mcr-builder --chown=brain:brain /usr/local/spm26_standalone/ /usr/local/spm26_standalone/
 COPY --from=mcr-builder --chown=brain:brain /usr/local/conn25b_standalone/ /usr/local/conn25b_standalone/
 
 # Part 2e: Copy FSL (~11GB after pruning)

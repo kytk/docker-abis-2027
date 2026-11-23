@@ -2,10 +2,11 @@
 
 # Dockerfile for kytk/abis-2027 with Multi-Stage Build
 # Author: K. Nemoto
-# Date: 03 Nov 2026
+# Date: 23 Nov 2026
 # Description: This Dockerfile uses a multi-stage build to create a smaller,
 #              optimized container image for neuroimaging analysis.
 
+# 1.0.22: Fix FreeSurferEnv.sh
 # 1.0.21: employ SPM26
 # 1.0.20: change the base from 22.04 to 24.04
 #         - AlizaMS: switch from the OBS .deb (22.04 only) to the upstream
@@ -473,6 +474,16 @@ COPY build/init/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY --chmod=755 build/bin/auto_clean_metadata.sh /usr/local/bin/auto_clean_metadata.sh
 COPY build/init/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY build/init/startup.sh /usr/local/bin/startup.sh
+
+# Fix upstream bug in FreeSurfer 8.2.0 FreeSurferEnv.sh (line 443):
+# the FSL >= 6.0.6 check tests $FSL_BIN (still unset) instead of $FSL_DIR,
+# so FSL_BIN always falls back to $FSL_DIR/bin. The csh version is correct.
+# Patched here in the final stage so the ~19GB FreeSurfer COPY layer stays
+# cached. grep fails the build if the upstream line ever changes.
+RUN sed -i 's|-d \$FSL_BIN/share/fsl/bin|-d $FSL_DIR/share/fsl/bin|' \
+        /usr/local/freesurfer/8.2.0/FreeSurferEnv.sh && \
+    grep -q 'if \[ -d \$FSL_DIR/share/fsl/bin \]' \
+        /usr/local/freesurfer/8.2.0/FreeSurferEnv.sh
 
 # Set final permissions
 RUN chmod +x /usr/local/bin/entrypoint.sh && \

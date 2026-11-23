@@ -139,6 +139,8 @@ To edit a `.bat`, convert to UTF-8 first and convert back afterwards:
 1. Push the image and set the tag in **both** config files:
    - `abis-2027-launcher-windows/lib/common.ps1` -> `$Script:ImageTag`
    - `abis-2027-launcher-macos/lib/common.sh` -> `IMAGE_TAG`
+   - `abis-2027-launcher-linux/lib/common.sh` -> `IMAGE_TAG` (not checked by
+     `release_common.sh` - see "Linux" below)
 2. Tell the participants to run `1_Download_Image` again. It is what picks up
    a rebuilt image; `2_Start_Lin4Neuro` deliberately never pulls.
 3. Check the download size and time shown in the confirmation dialog
@@ -248,6 +250,36 @@ To edit a `.bat`, convert to UTF-8 first and convert back afterwards:
 
    Then install once with the one-liners in `INSTALL_*.md` and check that
    `README.txt` and the window titles show the new version.
+
+## Linux
+
+`abis-2027-launcher-linux/` has the same steps as `0`-`3` as plain `.sh`
+files run from a terminal (`bash 2_Start_Lin4Neuro.sh [share-folder]`). It is
+terminal-only: questions are `[y/N]`, and the share folder is an argument or
+typed in (Tab completion, an absent folder can be created). It assumes Docker
+Engine installed natively (Docker Desktop for Linux is only noted in the
+check), so:
+
+- there is no `4_Configure_*`: there is no VM, Docker uses the host's memory
+  and CPUs directly; `0_Check_Environment` checks those instead;
+- a stopped engine is started with `sudo systemctl start docker` (after
+  asking), and "permission denied" leads to `usermod -aG docker` instructions;
+- `3_Stop_Lin4Neuro` does not stop the engine;
+- `1_Download_Image` keeps the PC awake with `systemd-inhibit` when polkit
+  allows it.
+
+**The share folder's owner.** The image's `startup.sh` runs
+`chown -R brain:brain /home/brain/share` (uid 1000) at every start. Docker
+Desktop hides that on macOS/Windows, but with native Docker it changes the
+host files. Hence `2_Start_Lin4Neuro` refuses `/`, `$HOME` and system folders
+as share folder, and asks before continuing when the user's uid is not 1000
+(also reported by `0_Check_Environment`).
+
+There is no release tooling for Linux: none of the problems the macOS and
+Windows archives work around (quarantine, Mark of the Web, encodings) exist
+there. Without `VERSION.txt` the version shows as `dev`. Pack it, if needed,
+with `tar czf abis-2027-launcher-linux.tar.gz --exclude=abis_check_result.txt
+abis-2027-launcher-linux`.
 
 ## Files
 

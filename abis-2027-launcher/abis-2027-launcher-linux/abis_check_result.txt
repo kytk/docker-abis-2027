@@ -1,0 +1,38 @@
+ABiS Lin4Neuro 動作環境チェック (Linux)
+作成日時: 2026-11-18 23:12:45
+ランチャーの版: dev
+必要なイメージ: kytk/abis-2027:26.12
+
+[Linux]
+  ディストリビューション : Ubuntu 24.04.5 LTS
+  カーネル     : 7.0.0-43-generic
+  アーキテクチャ : x86_64
+  CPU コア数   : 8
+  メモリ       : 31.0 GB
+  スワップ     : 2.0 GB
+  ユーザー     : kiyotaka (UID 1000)
+  画面         : あり (XFCE)
+  ブラウザ     : google-chrome
+  Bash         : 5.2.21(1)-release
+
+[ディスク空き容量]
+  /            : 空き 790 GB / 全体 3665 GB
+
+[Docker]
+  クライアント : Docker version 28.1.1, build 4eba377
+  サービス     : active
+  コンテキスト : default
+  docker グループ: 所属しています
+  エンジン     : 28.1.1
+  OS           : Ubuntu 24.04.5 LTS
+  使える CPU   : 8
+  使えるメモリ : 31.0 GB
+  データ保存先 : /var/lib/docker
+  保存先の空き : 790 GB / 全体 3665 GB
+
+  チュートリアル用イメージ: 未ダウンロード (kytk/abis-2027:26.12)
+                            準備ができたら「1_Download_Image.sh」を実行してください。
+
+[判定]
+  OK - この PC は必要な条件を満たしています。
+

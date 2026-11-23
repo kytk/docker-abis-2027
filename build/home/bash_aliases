@@ -36,8 +36,8 @@ export PATH=$PATH:/usr/local/mrtrix3/bin
 # dcm2niix
 export PATH=/usr/local/dcm2niix:$PATH
 
-#SPM25 standalone
-alias spm25='/usr/local/spm25_standalone/run_spm25.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
+#SPM26 standalone
+alias spm26='/usr/local/spm26_standalone/run_spm26.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
 
 #conn25b standalone
 alias conn='/usr/local/conn25b_standalone/run_conn.sh /usr/local/MATLAB/MCR/R2024b 2>/dev/null'
